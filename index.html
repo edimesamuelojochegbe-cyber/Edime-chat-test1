@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edime Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+}
+
+/* ===== LOGIN SCREEN ===== */
+.login-screen {
+  background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url("family.jpg");
+  background-size: cover;
+  background-position: center;
+  color: white;
+  justify-content: center;
+  text-align: center;
+}
+
+.app-title {
+  font-size: 42px;
+  margin-bottom: 40px;
+  letter-spacing: 1px;
+}
+
+.login-box {
+  width: 85%;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 15px;
+  background: #25D366;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+
+/* ===== GENERAL SCREENS ===== */
+.screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ===== FAMILY LIST ===== */
+#familyScreen {
+  background: #ece5dd;
+  height:100vh ;
+  overflow-y:auto ;
+}
+
+.header {
+  padding: 16px;
+  background: #075E54;
+  color: white;
+  text-align: center;
+  font-size: 22px;
+}
+
+.chat-row {
+  background: white;
+  padding: 15px;
+  margin: 8px 12px;
+  border-radius: 12px;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+.chat-row::before {
+  content: attr(data-letter);
+  width: 45px;
+  height: 45px;
+  background: #128C7E;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.user-list {
+  padding: 10px;
+}
+
+.chat-row:hover {
+  background: #f2f2f2;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+  background: #128C7E;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+/* Make layout full screen */
+#chatScreen {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 500px;
+  margin: auto;
+  background: #e5ddd5;
+  top: 0;
+  left: 0;
+  flex-direction: column;
+  z-index: 9999;
+  width: 100%;
+}
+
+/* HEADER */
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #128C7E;
+  color: white;
+}
+
+/* Back button (modern) */
+.back-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* Header info */
+.chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Avatar */
+.chat-avatar {
+  width: 40px;
+  height: 40px;
+  background: #075E54;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Status */
+.status {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* MESSAGES AREA */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+/* INPUT AREA */
+.chat-input {
+  display: flex;
+  padding: 10px;
+  background: #f0f0f0;
+  gap: 10px;
+}
+
+/* Input */
+#messageInput {
+  flex: 1;
+  border-radius: 20px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  resize: none; /* prevents manual dragging */
+  max-height: 100px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+/* Send button (WhatsApp style) */
+#sendBtn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background: #128C7E;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Messages area */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* space between messages */
+}
+
+/* Message bubbles */
+.message {
+  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: 15px;
+  font-size: 14px;
+  display: inline-block;   /* 🔥 IMPORTANT */
+  width: fit-content;      /* 🔥 IMPORTANT */
+  line-height: 1.4;
+}
+
+/* Sent messages */
+.message.sent {
+  background-color: #dcf8c6;
+  align-self: flex-end;
+}
+
+/* Received messages */
+.message.received {
+  background-color: white;
+  align-self: flex-start;
+}
+.chat-input {
+  display: flex;
+  padding: 10px;
+  gap: 8px;
+  align-items: center;
+}
+
+#messageInput {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+/* Send button */
+#sendBtn {
+  background: #128C7E;
+  border: none;
+  color: white;
+  font-size: 18px;
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#sendBtn:hover {
+  background: #075E54;
+}
+/* Chat header info */
+.chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Avatar circle */
+.chat-avatar {
+  width: 40px;
+  height: 40px;
+  background: #128C7E;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+/* User name & status */
+.chat-user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  color: white;
+}
+
+}
+
+#chatUserStatus {
+  font-size: 12px;
+  font-weight: normal;
+  opacity: 0.8;
+}
+/* Message timestamp */
+.message-time {
+  font-size: 10px;
+  text-align: right;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+.read-more {
+  color: #128C7E;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 5px;
+}
+/* Message container */
+.message {
+  position: relative; /* 🔥 allows time positioning */
+  max-width: 70%;
+  padding: 8px 12px 18px; /* extra bottom space for time */
+  border-radius: 15px;
+  font-size: 14px;
+  display: inline-block;
+  width: fit-content;
+}
+
+/* Message text */
+.msg-text {
+  word-wrap: break-word;
+}
+
+/* Time style (WhatsApp style) */
+.msg-time {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  font-size: 10px;
+  opacity: 0.6;
+}
+/* Different color for sent vs received time */
+.message.sent .msg-time {
+  color: #555;
+}
+
+.message.received .msg-time {
+  color: #777;
+}
+.input-area {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  background: #eee;
+}
+input {
+  flex: 1;
+  border-radius: 25px;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+
+button {
+  background: #128C7E;
+  color: white;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  border: none;
+}
+</style>
+<body>
+<div id="debug" style="
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+max-height: 150px;
+overflow: auto;
+background: black;
+color: lime;
+font-size: 12px;
+z-index: 99999;
+padding: 5px;
+"></div>
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="screen login-screen">
+  <h1 class="app-title">Edime Hub</h1>
+
+  <div class="login-box">
+    <input type="text" id="username" placeholder="Enter your name">
+    <input type="password" id="familyCode" placeholder="Family code">
+    <button onclick="login()">Enter</button>
+  </div>
+</div>
+
+<!-- FAMILY LIST -->
+<div id="familyScreen" class="screen hidden">
+  <div class="header">Edime Hub</div>
+  <div id="userList" class="user-list"></div>
+</div>
+
+<!-- CHAT SCREEN -->
+<div id="chatScreen" class="screen hidden">
+
+  <!-- HEADER -->
+  <div class="chat-header">
+    <button class="back-btn" onclick="backToFamily()"><</button>
+
+    <div class="chat-header-info">
+      <div class="chat-avatar" id="chatAvatar">M</div>
+      <div class="chat-user-info">
+        <div id="chatUserName">Name</div>
+        <div class="status">online</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div id="messages" class="chat-messages"></div>
+
+  <!-- INPUT -->
+  <div class="chat-input">
+    <button id="recordBtn" onclick="toggleRecording()">🎤</button>
+    <textarea id="messageInput" placeholder="Type a message..."></textarea>
+    <button id="sendBtn" onclick="sendMessage()">➤</button>
+  </div>
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { 
+  getFirestore, collection, addDoc, onSnapshot, query, orderBy 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDa8b7xvhiUPgDW9Zx-q3MATrQSN0yN8tI",
+  authDomain: "edime-hub.firebaseapp.com",
+  projectId: "edime-hub",
+  storageBucket: "edime-hub.firebasestorage.app",
+  messagingSenderId: "542470795247",
+  appId: "1:542470795247:web:6f7a7f09e81c8a2615101a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 🔥 MAKE FIREBASE GLOBAL
+window.db = db;
+window.addDoc = addDoc;
+window.collection = collection;
+window.onSnapshot = onSnapshot;
+window.query = query;
+window.orderBy = orderBy;
+</script>
+</body>
+
+<script src="script.js"></script>
+<script>
+  console.log("Script running");
+
+let currentChat = "";
+
+/* =========================
+   FIREBASE REGISTER USER
+========================= */
+async function registerUser(userName) {
+  try {
+    console.log("Saving user:", userName);
+
+    await addDoc(collection(db, "users"), {
+      name: userName,
+      createdAt: Date.now()
+    });
+
+    console.log("User saved successfully");
+  } catch (err) {
+    console.error("Register error:", err);
+  }
+}
+
+/* =========================
+   LOGIN
+========================= */
+const FAMILY_CODE = "1234";
+
+function login() {
+  const userName = document.getElementById("username").value.trim();
+  const code = document.getElementById("familyCode").value.trim();
+
+  if (!userName || !code) {
+    alert("Enter name and family code");
+    return;
+  }
+
+  if (code !== FAMILY_CODE) {
+    alert("Wrong family code ❌");
+    return;
+  }
+
+  // save user locally
+  localStorage.setItem("user", userName);
+
+  // save to firebase
+  registerUser(userName);
+
+  // switch screens
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("familyScreen").classList.remove("hidden");
+
+  // load users
+  loadUsers();
+}
+
+/* =========================
+   LOAD USERS (FIREBASE)
+========================= */
+function loadUsers() {
+  const userList = document.getElementById("userList");
+
+  userList.innerHTML = "Loading users...";
+
+  onSnapshot(collection(db, "users"), (snapshot) => {
+    userList.innerHTML = "";
+
+    if (snapshot.empty) {
+      userList.innerHTML = "<p>No users yet</p>";
+      return;
+    }
+
+    snapshot.forEach((doc) => {
+      const user = doc.data();
+      const name = user.name;
+
+      const div = document.createElement("div");
+      div.className = "chat-row";
+
+      div.innerHTML = `
+        <div class="avatar">${name.charAt(0)}</div>
+        <div>
+          <div class="chat-name">${name}</div>
+          <div class="chat-last-msg">Tap to chat</div>
+        </div>
+      `;
+
+      div.onclick = () => openChat(name);
+
+      userList.appendChild(div);
+    });
+
+    console.log("Users loaded:", snapshot.size);
+  }, (error) => {
+    console.error("Firestore error:", error);
+  });
+}
+
+/* =========================
+   OPEN CHAT
+========================= */
+function openChat(name) {
+  console.log("Opening chat:", name);
+
+  const myName = localStorage.getItem("user");
+
+  if (!myName) {
+    alert("User not logged in");
+    return;
+  }
+
+  currentChat = [myName, name].sort().join("_");
+
+  document.getElementById("familyScreen").classList.add("hidden");
+  document.getElementById("chatScreen").classList.remove("hidden");
+
+  document.getElementById("chatUserName").textContent = name;
+  document.getElementById("chatAvatar").textContent = name.charAt(0);
+
+  document.getElementById("messages").innerHTML = "";
+
+  listenMessages(currentChat);
+}
+
+/* =========================
+   BACK
+========================= */
+function backToFamily() {
+  document.getElementById("chatScreen").classList.add("hidden");
+  document.getElementById("familyScreen").classList.remove("hidden");
+}
+
+/* =========================
+   SEND MESSAGE
+========================= */
+window.sendMessage = async function () {
+  const input = document.getElementById("messageInput");
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  await addDoc(collection(db, "messages"), {
+    text: text,
+    chat: currentChat,
+    sender: localStorage.getItem("user"),
+    time: new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    }),
+    timestamp: Date.now()
+  });
+
+  input.value = "";
+};
+
+/* =========================
+   LISTEN MESSAGES
+========================= */
+function listenMessages(chatId) {
+  const q = query(collection(db, "messages"), orderBy("timestamp"));
+
+  onSnapshot(q, (snapshot) => {
+    const messagesDiv = document.getElementById("messages");
+    messagesDiv.innerHTML = "";
+
+    snapshot.forEach((doc) => {
+      const msg = doc.data();
+
+      if (msg.chat === chatId) {
+        const div = document.createElement("div");
+
+        const myName = localStorage.getItem("user");
+        const type = msg.sender === myName ? "sent" : "received";
+
+        div.className = "message " + type;
+
+        div.innerHTML = `
+          <div class="msg-text">${msg.text}</div>
+          <div class="msg-time">${msg.time}</div>
+        `;
+
+        messagesDiv.appendChild(div);
+      }
+    });
+
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+}
+
+/* =========================
+   ENTER KEY SEND
+========================= */
+const input = document.getElementById("messageInput");
+
+if (input) {
+  input.addEventListener("keypress", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+}
+async function addTestUser() {
+  await addDoc(collection(db, "users"), {
+    name: "Test User",
+    createdAt: Date.now()
+  });
+
+  console.log("Test user added");
+}
+</script>
+</body>
+</html>
